@@ -1,0 +1,22 @@
+{
+  "name": "bookish",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "tsc",
+    "start": "npm run compile && node ./dist/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@types/node": "^20.7.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "objection": "^3.1.1",
+    "typescript": "^5.2.2"
+  }
+}
