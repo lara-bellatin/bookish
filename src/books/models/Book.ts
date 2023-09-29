@@ -12,11 +12,14 @@ class Book extends BaseModel {
   mainGenre: string;
   goodreadsLink: string;
   amazonLink: string;
+  publishDate: Date;
   pageNumber: number;
   owned: boolean;
   status: Book.Status;
   favorite: boolean;
   rating: number;
+  startDate: Date;
+  finishDate: Date;
 
 
   // Relation

@@ -1,12 +1,37 @@
 {
   "compilerOptions": {
-    "rootDirs": ["src"],
-    "outDir": "dist",
-    "lib": ["es2020"],
-    "target": "es2020",
-    "module": "esnext",
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["ES2020", "dom"],
+    "sourceMap": true,
+    "outDir": "./dist",
     "moduleResolution": "node",
+    "removeComments": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": false,
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "types": ["node"]
-  }
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "baseUrl": ".",
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules"],
+  "include": [
+    "knexfile.ts",
+    "app.ts",
+    "main.ts",
+    "./db/seeds/*.ts",
+    "./script/**/*.ts",
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+  ]
 }
