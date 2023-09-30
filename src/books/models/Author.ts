@@ -5,9 +5,10 @@ import Series from "./Series";
 
 class Author extends BaseModel {
   id!: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   pseudonym: string;
+  website: string | null;
+  goodreadsLink!: string;
 
 
   // Relation

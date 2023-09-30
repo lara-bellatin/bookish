@@ -8,16 +8,19 @@ class Book extends BaseModel {
   id!: string;
   title!: string;
   authorId!: string;
+  coverImage: string;
   seriesId: string;
   mainGenre: string;
-  goodreadsLink: string;
+  goodreadsLink!: string;
   amazonLink: string;
   publishDate: Date;
-  pageNumber: number;
+  pageCount: number;
   owned: boolean;
   status: Book.Status;
   favorite: boolean;
-  rating: number;
+  publicRating: number;
+  myRating: number;
+  seriesOrder: number;
   startDate: Date;
   finishDate: Date;
 

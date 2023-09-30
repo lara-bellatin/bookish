@@ -7,6 +7,8 @@ class Series extends BaseModel {
   title!: string;
   authorId: string;
   rating: number;
+  goodreadsLink: string;
+  totalBooks: number;
 
   // Relations
   author: Author;
