@@ -34,7 +34,7 @@ class Author extends BaseModel {
         modelClass: Series,
         join: {
           from: "authors.id",
-          to: "bookSeries.authorId",
+          to: "series.authorId",
         }
       }
     }

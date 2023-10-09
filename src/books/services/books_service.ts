@@ -1,5 +1,5 @@
 import Book from "../models/Book";
-import GoodreadsScraper, { bookScrape } from "../../utils/goodreads_scraper";
+import GoodreadsScraper, { bookScrape } from "../../utils/goodreads_scraper_dynamic";
 import AuthorService from "./authors_service";
 import SeriesService from "./series_service";
 import { nanoid } from "nanoid";
@@ -7,7 +7,7 @@ import { nanoid } from "nanoid";
 
 async function getBookByGoodreadsLink({ link }: { link: string }) {
   const book = await Book.query().findOne({
-    goodreadsLink: link,
+    goodreadsLink: link!,
   }).withGraphFetched('[author, series]')
 
   if (!book) {
@@ -33,7 +33,7 @@ async function createBookFromGRLink({ link }: { link: string }) {
   }
 
   return await Book.query().findOne({
-    goodreadsLink: link,
+    goodreadsLink: link!,
   }).withGraphFetched('[author, series]');
 
 }
@@ -49,12 +49,12 @@ async function createBook({
 }) {
   return await Book.query().insert({
     id: "book_" + nanoid(),
-    title: scrapeData.title,
+    title: scrapeData.title!,
     authorId,
     seriesId,
-    coverImage: scrapeData.coverImage,
-    publicRating: scrapeData.rating,
-    seriesOrder: scrapeData.seriesOrder,
+    coverImage: scrapeData.coverImage!,
+    publicRating: scrapeData.rating!,
+    seriesOrder: scrapeData.seriesOrder!,
   });
 }
 

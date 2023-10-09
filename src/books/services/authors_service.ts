@@ -19,7 +19,7 @@ async function createAuthorFromGRLink({ link }: { link: string }) {
   const data = await GoodreadsScraper.scrapeGoodreadsAuthorLink({ link });
 
   if (!data) {
-    throw new Error("Could not get author information");
+    throw Error("Could not get author information");
   }
 
   const author = await Author.query().insert({

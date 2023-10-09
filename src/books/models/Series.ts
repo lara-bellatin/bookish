@@ -5,7 +5,6 @@ import Author from "./Author";
 class Series extends BaseModel {
   id!: string;
   title!: string;
-  authorId: string;
   rating: number;
   goodreadsLink: string;
   totalBooks: number;
@@ -15,7 +14,7 @@ class Series extends BaseModel {
 
 
   static get tableName() {
-    return "bookSeries";
+    return "series";
   }
 
   static get relationMappings() {
@@ -24,7 +23,7 @@ class Series extends BaseModel {
         relation: Model.HasOneRelation,
         modelClass: Author,
         join: {
-          from: "bookSeries.authorId",
+          from: "series.authorId",
           to: "authors.id",
         }
       }

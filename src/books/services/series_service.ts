@@ -21,7 +21,7 @@ async function createSeriesFromGRLink({ link }: { link: string }) {
   const data = await GoodreadsScraper.scrapeGoodreadsSeriesLink({ link });
 
   if (!data) {
-    throw new Error("Could not get series information");
+    throw Error("Could not get series information");
   }
 
   const series = await Series.query().insert({

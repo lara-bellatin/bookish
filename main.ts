@@ -1,8 +1,17 @@
 import express, { Request, Response } from "express";
 import BooksService from "./src/books/services/books_service";
+import Knex from "knex";
+import { Model } from "objection";
+import knexConfig from "./knexfile";
+import "dotenv/config";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+
+// Initialize DB conn
+// @ts-ignore
+const knex = Knex(knexConfig[process.env.NODE_ENV]);
+Model.knex(knex);
 
 app.get('/add-from-link', async (req: Request, res: Response) => {
   const link = req.query.link as string;

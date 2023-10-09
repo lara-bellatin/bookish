@@ -12,7 +12,6 @@ class Book extends BaseModel {
   seriesId: string;
   mainGenre: string;
   goodreadsLink!: string;
-  amazonLink: string;
   publishDate: Date;
   pageCount: number;
   owned: boolean;
@@ -49,7 +48,7 @@ class Book extends BaseModel {
         modelClass: Series,
         join: {
           from: "books.seriesId",
-          to: "bookSeries.id",
+          to: "series.id",
         }
       },
       collections: {
