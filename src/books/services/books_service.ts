@@ -1,5 +1,5 @@
 import Book from "../models/Book";
-import GoodreadsScraper from "../../utils/goodreads_scraper_dynamic";
+import GoodreadsScraper from "../../utils/goodreads_scraper";
 import AuthorService from "./authors_service";
 import SeriesService from "./series_service";
 import { nanoid } from "nanoid";
