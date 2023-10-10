@@ -12,8 +12,6 @@ async function scrapeGoodreadsBookLink({ link }: { link: string }): Promise<Book
 
     const html = Cheerio.load(request.data);
 
-    console.log(request.data)
-
     const bookData = html('body > div[class=BookPage__gridContainer]');
 
     // Book Cover Image
@@ -30,18 +28,6 @@ async function scrapeGoodreadsBookLink({ link }: { link: string }): Promise<Book
     const metadataSection = bookData.find('div[class=BookPageMetadataSection]');
     const author = metadataSection.find('a[class=ContributorLink]:first').attr('href');
     const rating = parseFloat(metadataSection.find('[class=RatingStatistics__rating]').text());
-
-    console.log({
-      title,
-      seriesOrder: parseInt(seriesOrder),
-      coverImage,
-      rating,
-      goodreadsLinks: {
-        book: link,
-        author,
-        series: seriesInfo.attr('href'),
-      }
-    })
 
     return {
       title,

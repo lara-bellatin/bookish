@@ -92,7 +92,6 @@ async function batchCreateBooks({
   booksData: Book.InputData[]
 }): Promise<Book[]> {
   return await Promise.all(booksData.map(async i => {
-    console.log(i)
     return await createBook({ bookData: i });
   }));
 

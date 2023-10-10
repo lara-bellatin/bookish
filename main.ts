@@ -28,7 +28,7 @@ app.get('/add-from-link', async (req: Request, res: Response) => {
 }) // add exception handler
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`App listening on port ${port}`)
 })
 
 export { app };
