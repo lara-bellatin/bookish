@@ -49,14 +49,8 @@ const knexConfig = {
   },
 
   production: {
-    client: "postgres",
-    connection: {
-      host: "localhost",
-      port: 5432,
-      database: process.env.POSTGRES_DB,
-      user: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-    },
+    client: "pg",
+    connection: process.env.DATABASE_URL,
     pool: {
       min: 2,
       max: 10,
