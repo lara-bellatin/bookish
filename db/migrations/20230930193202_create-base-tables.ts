@@ -13,7 +13,8 @@ export async function up(knex: Knex) {
   .createTable("series", (table) => {
     table.text("id").primary();
     table.text("title");
-    table.integer("total_books");
+    table.integer("main_books");
+    table.integer("additional_books");
     table.text("goodreads_link");
     table.float("rating");
     table.date("created_at");

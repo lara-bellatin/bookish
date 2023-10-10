@@ -76,6 +76,29 @@ namespace Book {
     DNF = "DNF",
     READ = "READ",
   }
+
+  export type InputData = {
+    title: string;
+    authorId?: string;
+    seriesId?: string;
+    status?: Book.Status;
+    seriesOrder?: number;
+    coverImage?: string;
+    myRating?: number;
+    publicRating?: number;
+    pageCount?: number;
+    mainGenre?: string;
+    owned?: boolean;
+    favorite?: boolean;
+    startDate?: Date;
+    finishDate?: Date;
+    publishDate?: Date;
+    goodreadsLinks: {
+      book?: string;
+      author?: string;
+      series?: string;
+  }
+  }
 }
 
 export default Book;

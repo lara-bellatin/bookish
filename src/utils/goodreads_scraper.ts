@@ -1,20 +1,9 @@
 import axios from "axios";
 import * as Cheerio from "cheerio";
+import Book from "../books/models/Book";
 
 
-export type bookScrape = {
-  title: string;
-  seriesOrder?: number;
-  coverImage?: string;
-  rating?: number;
-  goodreadsLinks: {
-    book: string;
-    author?: string;
-    series?: string;
-  }
-}
-
-async function scrapeGoodreadsBookLink({ link }: { link: string }): Promise<bookScrape> {
+async function scrapeGoodreadsBookLink({ link }: { link: string }): Promise<Book.InputData> {
   return await axios.get(link, {responseType: 'document'}).then(request => {
 
     if (!request.data) {
@@ -100,11 +89,11 @@ async function scrapeGoodreadsSeriesLink({ link }: { link: string }) {
     const html = Cheerio.load(request.data);
 
     const title = html('div[class=responsiveSeriesHeader__title] > h1');
-    const totalBooks = parseInt(title.parent().next().text().split(' ')[0]);
+    const mainBooks = parseInt(title.parent().next().text().split(' ')[0]);
 
-    const books: bookScrape[] = [];
+    const books: Book.InputData[] = [];
 
-    for (let i = 1; i <= totalBooks; i++) {
+    for (let i = 1; i <= mainBooks; i++) {
       const bookElement = html(`h3:contains("Book ${i}"):first`).next();
       const href = bookElement.find('div[class=u-paddingBottomXSmall] > a').attr('href');
       if (!href) {
@@ -117,7 +106,8 @@ async function scrapeGoodreadsSeriesLink({ link }: { link: string }) {
     
     return {
       title: title.text().replace(' Series', ''),
-      totalBooks,
+      mainBooks,
+      additionalBooks: 0,
       books,
     }
   });
