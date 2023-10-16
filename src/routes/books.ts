@@ -19,6 +19,12 @@ router.post('/', async (req: Request, res: Response) => {
   return res.send(book);
 });
 
+router.post('/from-goodreads/', async (req: Request, res: Response) => {
+  const scraperData = req.body;
+  const book = await BooksService.createBookFromScraper(scraperData);
+  return res.send(book);
+});
+
 router.post('/batch-create', async(req: Request, res: Response) => {
   const books = await BooksService.batchCreateBooks({ booksData: req.body });
   return res.send(books);

@@ -1,8 +1,7 @@
 import Book from "../models/Book";
-import GoodreadsScraper from "../../utils/goodreads_scraper";
-import AuthorService from "./authors_service";
-import SeriesService from "./series_service";
 import { nanoid } from "nanoid";
+import AuthorsService from "./authors_service";
+import SeriesService from "./series_service";
 
 
 // QUERIES
@@ -20,10 +19,6 @@ async function getBookByGoodreadsLink({ link }: { link: string }) {
     goodreadsLink: link!,
   }).withGraphFetched('[author, series]')
 
-  if (!book) {
-    return await createBookFromGRLink({ link });
-  }
-
   return book;
 }
 
@@ -38,36 +33,43 @@ async function createBook({
 }) {
   return await Book.query().insert({
     id: "book_" + nanoid(),
-    title: bookData.title!,
-    authorId: bookData.authorId!,
-    seriesId: bookData.seriesId!,
-    status: bookData.status!,
-    coverImage: bookData.coverImage!,
-    publicRating: bookData.publicRating!,
-    myRating: bookData.myRating!,
-    pageCount: bookData.pageCount!,
-    seriesOrder: bookData.seriesOrder!,
+    ...bookData,
   });
-}
+};
 
+async function createBookFromScraper(scraperData: Book.ScraperData): Promise<Book> {
+  console.log("Publication Info: ", scraperData.publicationInfo);
 
-async function createBookFromGRLink({ link }: { link: string }) {
-  const bookInfo = await GoodreadsScraper.scrapeGoodreadsBookLink({ link });
+  const author = await AuthorsService.getAuthorFromNameAndGR({
+    name: scraperData.authorName,
+    goodreadsLink: scraperData.authorLink,
+    replaceIfMismatch: true,
+  });
 
-  if (bookInfo.goodreadsLinks.series) {
-    await SeriesService.createSeriesFromGRLink({ link: bookInfo.goodreadsLinks.series });
+  const seriesInfo = scraperData.seriesInfo.split(' #');
+  const series = await SeriesService.getSeriesFromTitleAndGR({
+    title: seriesInfo[0],
+    goodreadsLink: scraperData.seriesLink,
+    replaceIfMismatch: true,
+  });
 
-  } else {
-    const author = await AuthorService.getAuthorByGoodreadsLink({ link: bookInfo.goodreadsLinks.author! });
-    await createBook({
-      bookData: { ...bookInfo, authorId: author.id },
-    })
-  }
+  const publishDate = new Date(scraperData.publicationInfo.split(" by ")[0]);
+  const pageCount = parseInt(scraperData.publicationInfo.split(' ')[1]);
 
-  return await Book.query().findOne({
-    goodreadsLink: link!,
-  }).withGraphFetched('[author, series]');
+  const bookData: Book.InputData = {
+    title: scraperData.title,
+    goodreadsLink: scraperData.goodreadsLink,
+    authorId: author.id,
+    seriesId: series.id,
+    status: Book.Status.TBR,
+    coverImage: scraperData.coverImage,
+    publicRating: scraperData.rating,
+    pageCount,
+    seriesOrder: parseInt(seriesInfo[1]),
+    publishDate,
+};
 
+  return await createBook({ bookData });
 }
 
 async function batchCreateBooksFromSeries({
@@ -115,7 +117,7 @@ export default {
 
   // MUTATIONS
   createBook,
-  createBookFromGRLink,
+  createBookFromScraper,
   batchCreateBooks,
   batchCreateBooksFromSeries,
   updateBook,
