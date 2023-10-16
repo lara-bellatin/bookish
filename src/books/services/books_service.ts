@@ -38,7 +38,7 @@ async function createBook({
 };
 
 async function createBookFromScraper(scraperData: Book.ScraperData): Promise<Book> {
-  console.log("Publication Info: ", scraperData.publicationInfo);
+  const book = await getBookByGoodreadsLink({ link: scraperData.goodreadsLink });
 
   const author = await AuthorsService.getAuthorFromNameAndGR({
     name: scraperData.authorName,
@@ -46,30 +46,37 @@ async function createBookFromScraper(scraperData: Book.ScraperData): Promise<Boo
     replaceIfMismatch: true,
   });
 
+  const publishDate = new Date(scraperData.publicationInfo.split(" by ")[0]);
+  const pageCount = parseInt(scraperData.formatInfo.split(' ')[0]);
+
+  const bookData: Book.InputData = {
+    title: scraperData.title,
+    goodreadsLink: scraperData.goodreadsLink,
+    authorId: author.id,
+    status: Book.Status.TBR,
+    coverImage: scraperData.coverImage,
+    publicRating: scraperData.rating,
+    pageCount,
+    publishDate,
+};
+
+if (scraperData.seriesInfo) {
   const seriesInfo = scraperData.seriesInfo.split(' #');
   const series = await SeriesService.getSeriesFromTitleAndGR({
     title: seriesInfo[0],
     goodreadsLink: scraperData.seriesLink,
     replaceIfMismatch: true,
   });
+  bookData['seriesId'] = series.id;
+  bookData['seriesOrder'] = parseInt(seriesInfo[1]);
+}
 
-  const publishDate = new Date(scraperData.publicationInfo.split(" by ")[0]);
-  const pageCount = parseInt(scraperData.publicationInfo.split(' ')[1]);
 
-  const bookData: Book.InputData = {
-    title: scraperData.title,
-    goodreadsLink: scraperData.goodreadsLink,
-    authorId: author.id,
-    seriesId: series.id,
-    status: Book.Status.TBR,
-    coverImage: scraperData.coverImage,
-    publicRating: scraperData.rating,
-    pageCount,
-    seriesOrder: parseInt(seriesInfo[1]),
-    publishDate,
-};
-
+if (book) {
+  return await Book.query().patchAndFetchById(book.id, bookData);
+} else {
   return await createBook({ bookData });
+} 
 }
 
 async function batchCreateBooksFromSeries({
