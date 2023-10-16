@@ -48,12 +48,19 @@ async function createBookFromScraper(scraperData: Book.ScraperData): Promise<Boo
 
   const publishDate = new Date(scraperData.publicationInfo.split(" by ")[0]);
   const pageCount = parseInt(scraperData.formatInfo.split(' ')[0]);
+  let status = Book.Status.TBR;
+
+  if (publishDate > new Date()) {
+    status = Book.Status.UNRELEASED
+  } else {
+    status = scraperData.status === 'Currently Reading' ? Book.Status.READING : Book.Status.READ;
+  }
 
   const bookData: Book.InputData = {
     title: scraperData.title,
     goodreadsLink: scraperData.goodreadsLink,
     authorId: author.id,
-    status: Book.Status.TBR,
+    status,
     coverImage: scraperData.coverImage,
     publicRating: scraperData.rating,
     pageCount,
