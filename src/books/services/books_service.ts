@@ -61,6 +61,7 @@ async function createBookFromScraper(scraperData: Book.ScraperData): Promise<Boo
     goodreadsLink: scraperData.goodreadsLink,
     authorId: author.id,
     status,
+    mainGenre: scraperData.genre1.toLowerCase(),
     coverImage: scraperData.coverImage,
     publicRating: scraperData.rating,
     pageCount,
