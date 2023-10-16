@@ -109,8 +109,8 @@ namespace Book {
     publicationInfo: string;
     rating: number;
     genre1: string;
-    genre2: string;
-    genre3: string;
+    startDate: string;
+    finishDate: string;
   }
 }
 

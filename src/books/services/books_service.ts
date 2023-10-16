@@ -66,6 +66,8 @@ async function createBookFromScraper(scraperData: Book.ScraperData): Promise<Boo
     publicRating: scraperData.rating,
     pageCount,
     publishDate,
+    startDate: new Date(scraperData.startDate),
+    finishDate: new Date(scraperData.finishDate),
 };
 
 if (scraperData.seriesInfo) {
