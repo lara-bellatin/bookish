@@ -1,5 +1,4 @@
 import Author from "../models/Author";
-import GoodreadsScraper from "../../utils/goodreads_scraper";
 import { nanoid } from "nanoid";
 
 
@@ -13,13 +12,31 @@ async function getAuthors(params: {[key: string]: string;}) {
   return await Author.query().where(params);
 }
 
-async function getAuthorByGoodreadsLink({ link }: { link: string }) {
-  let author = await Author.query().findOne({
-    goodreadsLink: link,
-  });
+async function getAuthorFromNameAndGR({
+  name,
+  goodreadsLink,
+  replaceIfMismatch,
+}: {
+  name: string;
+  goodreadsLink?: string;
+  replaceIfMismatch?: boolean;
+}): Promise<Author> {
+  let author = await Author.query().where({
+    name,
+    goodreadsLink,
+  }).first();
 
   if (!author) {
-    return await createAuthorFromGRLink({ link });
+    author = await createAuthor({ authorData: {
+      name,
+      goodreadsLink,
+    }})
+  } else {
+    if (replaceIfMismatch && (author.goodreadsLink !== goodreadsLink)) {
+      author = await Author.query().patchAndFetchById(author.id, {
+        goodreadsLink,
+      })
+    }
   }
 
   return author;
@@ -41,22 +58,6 @@ async function createAuthor({
   
 }
 
-async function createAuthorFromGRLink({ link }: { link: string }) {
-  const data = await GoodreadsScraper.scrapeGoodreadsAuthorLink({ link });
-
-  if (!data) {
-    throw Error("Could not get author information");
-  }
-
-  const authorData: Author.InputData = {
-    name: data.name,
-    website: data.website,
-    goodreadsLink: link,
-  };
-
-  return await createAuthor({ authorData });
-
-};
 
 async function batchCreateAuthors({
   authorsData,
@@ -85,11 +86,10 @@ export default {
   // QUERIES
   getAuthorById,
   getAuthors,
-  getAuthorByGoodreadsLink,
+  getAuthorFromNameAndGR,
 
   //MUTATIONS
   createAuthor,
-  createAuthorFromGRLink,
   batchCreateAuthors,
   updateAuthor
 }

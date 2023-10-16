@@ -79,6 +79,7 @@ namespace Book {
 
   export type InputData = {
     title: string;
+    goodreadsLink: string;
     authorId?: string;
     seriesId?: string;
     status?: Book.Status;
@@ -93,11 +94,23 @@ namespace Book {
     startDate?: Date;
     finishDate?: Date;
     publishDate?: Date;
-    goodreadsLinks: {
-      book?: string;
-      author?: string;
-      series?: string;
   }
+
+  export type ScraperData = {
+    title: string;
+    goodreadsLink: string;
+    status: string;
+    authorName: string;
+    authorLink: string;
+    seriesInfo: string;
+    seriesLink: string;
+    coverImage: string;
+    formatInfo: string;
+    publicationInfo: string;
+    rating: number;
+    genre1: string;
+    genre2: string;
+    genre3: string;
   }
 }
 
