@@ -34,6 +34,9 @@ async function createBook({
   return await Book.query().insert({
     id: "book_" + nanoid(),
     ...bookData,
+    status: bookData.status ?? Book.Status.TBR,
+    owned: bookData.owned ?? false,
+    favorite: bookData.favorite ?? false,
   });
 };
 

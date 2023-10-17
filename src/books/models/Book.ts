@@ -15,6 +15,7 @@ class Book extends BaseModel {
   publishDate: Date;
   pageCount: number;
   owned: boolean;
+  format: Book.Format;
   status: Book.Status;
   favorite: boolean;
   publicRating: number;
@@ -22,6 +23,7 @@ class Book extends BaseModel {
   seriesOrder: number;
   startDate: Date;
   finishDate: Date;
+  notes: string;
 
 
   // Relation
@@ -77,12 +79,19 @@ namespace Book {
     READ = "READ",
   }
 
+  export enum Format {
+    KINDLE = "KINDLE",
+    AUDIOBOOK = "AUDIBLE",
+    PHYSICAL = "PHYSICAL",
+  }
+
   export type InputData = {
     title: string;
     goodreadsLink: string;
     authorId?: string;
     seriesId?: string;
     status?: Book.Status;
+    format?: Book.Format;
     seriesOrder?: number;
     coverImage?: string;
     myRating?: number;
