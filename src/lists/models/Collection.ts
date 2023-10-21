@@ -5,6 +5,7 @@ import Book from "../../books/models/Book";
 class Collection extends BaseModel {
   id!: string;
   name!: string;
+  description: string;
 
   // Relations
   books: Book[];

@@ -22,6 +22,8 @@ class Book extends BaseModel {
   seriesOrder: number;
   startDate: Date;
   finishDate: Date;
+  format: Book.Format;
+  notes: string;
 
 
   // Relation
@@ -77,12 +79,19 @@ namespace Book {
     READ = "READ",
   }
 
+  export enum Format {
+    KINDLE = "KINDLE",
+    PHYSICAL = "PHYSICAL",
+    AUDIOBOOK = "AUDIOBOOK",
+  }
+
   export type InputData = {
     title: string;
     goodreadsLink: string;
     authorId?: string;
     seriesId?: string;
     status?: Book.Status;
+    format?: Book.Format;
     seriesOrder?: number;
     coverImage?: string;
     myRating?: number;
@@ -94,6 +103,7 @@ namespace Book {
     startDate?: Date;
     finishDate?: Date;
     publishDate?: Date;
+    notes?: string;
   }
 
   export type ScraperData = {
