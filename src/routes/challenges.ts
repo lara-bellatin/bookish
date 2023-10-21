@@ -21,9 +21,8 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 router.post('/:challengeId/parameter', async (req: Request, res: Response) => {
-  const challengeId = req.body.challengeId
-  const parameterData = req.body.parameterData;
-  const parameter = await ChallengesService.createChallengeParameter({ challengeId, ...parameterData });
+  const parameterData = req.body;
+  const parameter = await ChallengesService.createChallengeParameter(parameterData);
   return res.send(parameter);
 });
 
