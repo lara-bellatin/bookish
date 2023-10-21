@@ -19,6 +19,8 @@ Model.knex(knex);
 app.use('/books', routes.books);
 app.use('/authors', routes.authors);
 app.use('/series', routes.series);
+app.use("/collections", routes.collections);
+app.use("/challenges", routes.challenges);
 
 app.get('/add-from-link', async (req: Request, res: Response) => {
   const link = req.query.link as string;
