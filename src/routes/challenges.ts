@@ -20,7 +20,7 @@ router.post('/', async (req: Request, res: Response) => {
   return res.send(challenge);
 });
 
-router.post('/:challengeId/parameter', async (req: Request, res: Response) => {
+router.post('/parameter', async (req: Request, res: Response) => {
   const parameterData = req.body;
   const parameter = await ChallengesService.createChallengeParameter(parameterData);
   return res.send(parameter);
