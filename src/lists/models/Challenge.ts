@@ -1,18 +1,18 @@
 import { Model } from "objection";
 import BaseModel from "../../utils/BaseModel";
-import ChallengeParameters from "./ChallengeParameters";
+import ChallengeParameter from "./ChallengeParameter";
 
 class Challenge extends BaseModel {
   id!: string;
   name!: string;
   description: string;
-  goal: string;
-  total: string;
-  start_date: Date;
-  end_date: Date;
+  goal: number;
+  total: number;
+  startDate: Date;
+  endDate: Date;
 
   // Relations
-  challengeParameters: ChallengeParameters[];
+  parameters: ChallengeParameter[];
 
   static get tableName() {
     return "challenges";
@@ -20,9 +20,9 @@ class Challenge extends BaseModel {
 
   static get relationMappings() {
     return {
-      "challengeParameters": {
+      parameters: {
         relation: Model.HasManyRelation,
-        modelClass: ChallengeParameters,
+        modelClass: ChallengeParameter,
         join: {
           from: "challenges.id",
           to: "challenge_parameters.challengeId",
@@ -31,6 +31,16 @@ class Challenge extends BaseModel {
     }
   }
 
+}
+
+namespace Challenge {
+  export type InputData = {
+    name: string;
+    description?: string;
+    goal?: number;
+    startDate?: Date;
+    endDate?: Date;
+  }
 }
 
 export default Challenge;

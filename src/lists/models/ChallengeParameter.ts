@@ -2,10 +2,11 @@ import { Model } from "objection";
 import BaseModel from "../../utils/BaseModel";
 import Challenge from "./Challenge";
 
-class ChallengeParameters extends BaseModel {
+class ChallengeParameter extends BaseModel {
   id!: string;
-  type: ChallengeParameters.Type;
-  property: ChallengeParameters.Property;
+  challengeId: string;
+  type: ChallengeParameter.Type;
+  property: ChallengeParameter.Property;
   value: string;
 
   // Relations
@@ -17,7 +18,7 @@ class ChallengeParameters extends BaseModel {
 
   static get relationMappings() {
     return {
-      "challenge": {
+      challenge: {
         relation: Model.HasOneRelation,
         modelClass: Challenge,
         join: {
@@ -30,7 +31,7 @@ class ChallengeParameters extends BaseModel {
 
 }
 
-namespace ChallengeParameters{
+namespace ChallengeParameter{
   export enum Type {
     INCLUDE = "INCLUDE",
     EXCLUDE = "EXCLUDE",
@@ -42,6 +43,13 @@ namespace ChallengeParameters{
     AUTHOR = "AUTHOR",
     GENRE = "GENRE",
   }
+
+  export type InputData = {
+    challengeId: string;
+    type: string;
+    property: string;
+    value: string;
+  }
 }
 
-export default ChallengeParameters;
+export default ChallengeParameter;
