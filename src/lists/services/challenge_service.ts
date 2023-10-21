@@ -20,7 +20,7 @@ async function createChallenge({
   challengeParameters,
 }: {
   challengeData: Challenge.InputData;
-  challengeParameters: ChallengeParameter.InputData[];
+  challengeParameters?: ChallengeParameter.InputData[];
 }): Promise<Challenge> {
 
   const challenge = await Challenge.query().insert({
@@ -28,14 +28,16 @@ async function createChallenge({
     ...challengeData,
   });
 
-  challenge.parameters = await Promise.all(challengeParameters.map(async parameter => {
-    return await createChallengeParameter({
-      challengeId: challenge.id,
-      type: parameter.type as ChallengeParameter.Type,
-      property: parameter.property as ChallengeParameter.Property,
-      value: parameter.value,
-    })
-  }));
+  if (challengeParameters && challengeParameters.length) {
+    challenge.parameters = await Promise.all(challengeParameters.map(async parameter => {
+      return await createChallengeParameter({
+        challengeId: challenge.id,
+        type: parameter.type as ChallengeParameter.Type,
+        property: parameter.property as ChallengeParameter.Property,
+        value: parameter.value,
+      })
+    }));
+  }
 
   return challenge;
 };

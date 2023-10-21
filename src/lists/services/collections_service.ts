@@ -13,6 +13,16 @@ async function getCollections(params: {[key: string]: string;}) {
   return await Collection.query().where(params);
 }
 
+async function getCollectionMembershipById(id: string) {
+  return await CollectionMembership.query().findById(id);
+}
+
+async function getCollectionMembershipByMembers({ collectionId, bookId }: { collectionId: string; bookId: string }) {
+  return await CollectionMembership.query().findOne({
+    collectionId,
+    bookId,
+  });
+}
 
 // MUTATIONS
 
@@ -33,15 +43,11 @@ async function createCollection({
     await Promise.all(bookIds.map(async bookId => {
       const book = await BooksService.getBookById(bookId);
       if (book) {
-        collection.books.push(book);
-        const membership = await createCollectionMembership({
+        await createCollectionMembership({
           bookId: bookId,
           collectionId: collection.id,
         });
-  
-        collection.memberships.push(membership);
       }
-
     }));
   }
 
@@ -55,6 +61,12 @@ async function createCollectionMembership({
   bookId: string;
   collectionId: string;
 }): Promise<CollectionMembership> {
+  const membership = await getCollectionMembershipByMembers({ collectionId, bookId });
+
+  if (membership) {
+    return membership;
+  }
+
   return await CollectionMembership.query().insert({
     id: "comem_" + nanoid(),
     bookId,
@@ -67,6 +79,8 @@ export default {
   // QUERIES
   getCollectionById,
   getCollections,
+  getCollectionMembershipById,
+  getCollectionMembershipByMembers,
 
   // MUTATIONS
   createCollection,
