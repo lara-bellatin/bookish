@@ -6,15 +6,15 @@ export async function up(knex: Knex) {
     table.text("id").primary();
     table.text("name");
     table.text("description");
-    table.date("created_at");
-    table.date("updated_at");
+    table.datetime("created_at");
+    table.datetime("updated_at");
   })
   .createTable("collection_memberships", (table) => {
     table.text("id").primary();
     table.text("collection_id").references("collections");
     table.text("book_id").references("books");
-    table.date("created_at");
-    table.date("updated_at");
+    table.datetime("created_at");
+    table.datetime("updated_at");
   })
   .createTable("challenges", (table) => {
     table.text("id").primary();
@@ -24,16 +24,16 @@ export async function up(knex: Knex) {
     table.integer("total");
     table.date("start_date");
     table.date("end_date");
-    table.date("created_at");
-    table.date("updated_at");
+    table.datetime("created_at");
+    table.datetime("updated_at");
   })
   .createTable("challenge_parameters", (table) => {
     table.text("id").primary();
     table.text("type");
     table.text("property");
     table.text("value");
-    table.date("created_at");
-    table.date("updated_at");
+    table.datetime("created_at");
+    table.datetime("updated_at");
   })
 }
 

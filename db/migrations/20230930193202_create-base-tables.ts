@@ -7,8 +7,8 @@ export async function up(knex: Knex) {
     table.text("name");
     table.text("website");
     table.text("goodreads_link");
-    table.date("created_at");
-    table.date("updated_at");
+    table.datetime("created_at");
+    table.datetime("updated_at");
   })
   .createTable("series", (table) => {
     table.text("id").primary();
@@ -17,8 +17,8 @@ export async function up(knex: Knex) {
     table.integer("additional_books");
     table.text("goodreads_link");
     table.float("rating");
-    table.date("created_at");
-    table.date("updated_at");
+    table.datetime("created_at");
+    table.datetime("updated_at");
   })
   .createTable("books", (table) => {
     table.text("id").primary();
@@ -38,8 +38,8 @@ export async function up(knex: Knex) {
     table.float("my_rating");
     table.date("start_date");
     table.date("finish_date");
-    table.date("created_at");
-    table.date("updated_at");
+    table.datetime("created_at");
+    table.datetime("updated_at");
   });
 }
 
