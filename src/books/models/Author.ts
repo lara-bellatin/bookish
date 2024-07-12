@@ -45,8 +45,7 @@ class Author extends BaseModel {
 namespace Author {
   export type InputData = {
     name: string;
-    website?: string | null;
-    pseudonym?: string;
+    website?: string;
     goodreadsLink?: string;
   }
 }

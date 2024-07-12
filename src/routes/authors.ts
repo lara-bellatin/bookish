@@ -14,7 +14,7 @@ router.get('/:authorId', async (req: Request, res: Response) => {
 });
 
 router.post('/', async (req: Request, res: Response) => {
-  const author = await AuthorsService.createAuthor({ authorData: req.body });
+  const author = await AuthorsService.getAuthorByData({ authorData: req.body });
   return res.send(author);
 });
 
