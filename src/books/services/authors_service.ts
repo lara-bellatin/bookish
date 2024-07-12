@@ -12,36 +12,27 @@ async function getAuthors(params: {[key: string]: string;}) {
   return await Author.query().where(params);
 }
 
-async function getAuthorFromNameAndGR({
-  name,
-  goodreadsLink,
+async function getAuthorByData({
+  authorData,
   replaceIfMismatch,
 }: {
-  name: string;
-  goodreadsLink?: string;
+  authorData: {name: string; website?: string; goodreadsLink?: string};
   replaceIfMismatch?: boolean;
 }): Promise<Author> {
-  let author = await Author.query().where({
-    name,
-    goodreadsLink,
-  }).first();
+  let author = await Author.query().where(authorData).first();
 
   if (!author) {
-    author = await createAuthor({ authorData: {
-      name,
-      goodreadsLink,
-    }})
+    author = await createAuthor({ authorData})
   } else {
-    if (replaceIfMismatch && (author.goodreadsLink !== goodreadsLink)) {
+    if (replaceIfMismatch && authorData.goodreadsLink && (author.goodreadsLink !== authorData.goodreadsLink)) {
       author = await Author.query().patchAndFetchById(author.id, {
-        goodreadsLink,
+        goodreadsLink: authorData.goodreadsLink
       })
     }
   }
 
   return author;
 }
-
 
 // MUTATIONS
 
@@ -66,7 +57,8 @@ async function batchCreateAuthors({
 }): Promise<Author[]> {
 
   return await Promise.all(authorsData.map(async i => {
-    return await createAuthor({ authorData: i });
+    const author = await getAuthorByData({ authorData: { name: i.name, goodreadsLink: i.goodreadsLink }, replaceIfMismatch: true });
+    return await updateAuthor({ id: author.id, updateData: i})
   }));
 
 };
@@ -86,7 +78,7 @@ export default {
   // QUERIES
   getAuthorById,
   getAuthors,
-  getAuthorFromNameAndGR,
+  getAuthorByData,
 
   //MUTATIONS
   createAuthor,

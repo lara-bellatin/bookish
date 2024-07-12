@@ -31,6 +31,11 @@ async function createBook({
 }: {
   bookData: Book.InputData,
 }) {
+  if (bookData.goodreadsLink) {
+    const book = await getBookByGoodreadsLink({ link: bookData.goodreadsLink });
+    if (book) return book;
+  }
+
   return await Book.query().insert({
     id: "book_" + nanoid(),
     ...bookData,
@@ -38,11 +43,11 @@ async function createBook({
 };
 
 async function createBookFromScraper(scraperData: Book.ScraperData): Promise<Book> {
-  const book = await getBookByGoodreadsLink({ link: scraperData.goodreadsLink });
-
-  const author = await AuthorsService.getAuthorFromNameAndGR({
-    name: scraperData.authorName,
-    goodreadsLink: scraperData.authorLink,
+  const author = await AuthorsService.getAuthorByData({
+    authorData: {
+      name: scraperData.authorName,
+      goodreadsLink: scraperData.authorLink,
+    },
     replaceIfMismatch: true,
   });
 
@@ -65,7 +70,7 @@ async function createBookFromScraper(scraperData: Book.ScraperData): Promise<Boo
     mainGenre: scraperData.genre1.toLowerCase(),
     coverImage: scraperData.coverImage,
     publicRating: scraperData.rating,
-    pageCount,
+    pageCount: isNaN(pageCount) ? undefined : pageCount,
     publishDate,
     startDate: scraperData.startDate ? new Date(scraperData.startDate) : undefined,
     finishDate: scraperData.finishDate ? new Date(scraperData.finishDate) : undefined,
@@ -82,6 +87,7 @@ if (scraperData.seriesInfo) {
   bookData['seriesOrder'] = parseInt(seriesInfo[1]);
 }
 
+const book = await getBookByGoodreadsLink({ link: scraperData.goodreadsLink });
 
 if (book) {
   return await Book.query().patchAndFetchById(book.id, bookData);
