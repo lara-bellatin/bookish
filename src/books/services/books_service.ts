@@ -59,7 +59,7 @@ async function createBookFromScraper(scraperData: Book.ScraperData): Promise<Boo
   if (publishDate! > new Date()) {
     status = Book.Status.UNRELEASED
   } else {
-    status = scraperData.status === 'Currently Reading' ? Book.Status.READING : Book.Status.READ;
+    status = scraperData.status === 'Currently Reading' ? Book.Status.READING : Book.Status.TBR;
   }
 
   const bookData: Book.InputData = {
